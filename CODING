@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <string.h>
+// Define the maximum number of students
+#define MAX_STUDENTS 100
+// Structure to hold student information
+typedef struct {
+    char name[50];
+    int id;
+    float grades[5];
+    float average;
+    char grade;
+} Student;
+// Function to calculate the average grade of a student
+float calculateAverage(float grades[], int numGrades) {
+    float sum = 0;
+    for (int i = 0; i < numGrades; i++) {
+        sum += grades[i];
+    }
+    return sum / numGrades;
+}
+// Function to determine the grade category
+char determineGrade(float average) {
+    if (average >= 90) {
+        return 'A';
+    } else if (average >= 80) {
+        return 'B';
+    } else if (average >= 70) {
+        return 'C';
+    } else if (average >= 60) {
+        return 'D';
+    } else {
+        return 'F';
+    }
+}
+// Function to input student data
+void inputStudentData(Student *student) {
+    printf("Enter student name: ");
+    scanf("%s", student->name);
+    printf("Enter student ID: ");
+    scanf("%d", &student->id);
+    printf("Enter 5 grades: ");
+    for (int i = 0; i < 5; i++) {
+        scanf("%f", &student->grades[i]);
+    }
+    student->average = calculateAverage(student->grades, 5);
+    student->grade = determineGrade(student->average);
+}
+// Function to display student data
+void displayStudentData(Student student) {
+    printf("Name: %s\n", student.name);
+    printf("ID: %d\n", student.id);
+    printf("Grades: ");
+    for (int i = 0; i < 5; i++) {
+        printf("%.2f ", student.grades[i]);
+    }
+    printf("\nAverage: %.2f\n", student.average);
+    printf("Grade: %c\n", student.grade);
+}
+// Function to search for students by grade
+void searchByGrade(Student students[], int numStudents, char searchGrade) {
+    int found = 0;
+    printf("\nStudents with grade %c:\n", searchGrade);
+    for (int i = 0; i < numStudents; i++) {
+        if (students[i].grade == searchGrade) {
+            displayStudentData(students[i]);
+            found = 1;
+        }
+    }
+    if (!found) {
+        printf("No students found with grade %c\n", searchGrade);
+    }
+}
+int main() {
+    Student students[MAX_STUDENTS];
+    int numStudents;
+    char searchGrade;
+    printf("Enter the number of students: ");
+    scanf("%d", &numStudents);
+    for (int i = 0; i < numStudents; i++) {
+        printf("\nEntering data for student %d:\n", i + 1);
+        inputStudentData(&students[i]);
+    }
+    printf("\nStudent Information:\n");
+    for (int i = 0; i < numStudents; i++) {
+        printf("\nStudent %d:\n", i + 1);
+        displayStudentData(students[i]);
+    }
+    printf("\nEnter the grade to search for (A/B/C/D/F): ");
+    scanf(" %c", &searchGrade);
+    searchByGrade(students, numStudents, searchGrade);
+    return 0;
+}
